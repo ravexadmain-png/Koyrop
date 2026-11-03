@@ -1,7 +1,0 @@
-# ডিক্লেয়ার করা ফোল্ডার ও টেম্পোরারি ফাইলগুলো গিটহাবে আপলোড হওয়া থেকে বাদ দেওয়ার জন্য
-WolferUltra_*
-WolferMirror_*
-WolferDump_*
-__pycache__/
-*.pyc
-.DS_Store
