@@ -16,13 +16,13 @@ RESET = "\033[0m"
 def banner():
     print(f"""{CYAN}
        ▄██████▄
-      ██ ◣    ◢ ██
-    ██     ▄▄     ██
+      ██ ◣   ◢ ██
+     ██    ▄▄  ██
       ██ ████ ██
        ▀██████▀ 
 
 {WHITE}==================================================
-{GREEN}       Wolfer tools - koyrop [PRO v3.0]
+{GREEN}       Wolfer tools - koyrop [PRO v3.2]
 {YELLOW}       Operator : Algriom
 {CYAN}       Channel  : @algriomhake44
 {WHITE}=================================================={RESET}
@@ -37,7 +37,7 @@ def get_recon(url):
         print(f"{GREEN}[+] Target Domain: {domain}{RESET}")
         print(f"{GREEN}[+] Server IP: {ip}{RESET}")
     except:
-        print(f"{RED}[!] IP resolve kora jayni.{RESET}")
+        print(f"{RED}[!] IP resolve kora jayni. Sothik URL din.{RESET}")
 
 def get_local_path(url, output_dir):
     parsed = urlparse(url)
@@ -102,20 +102,7 @@ def generate_dashboard(output_dir, domain_name, all_files):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wolfer Pro Dashboard - {domain_name}</title>
-    <style>
-        body {{ background-color: #0f172a; color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; }}
-        .container {{ max-width: 950px; margin: auto; background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }}
-        h1 {{ color: #38bdf8; text-align: center; margin-bottom: 5px; }}
-        p.sub {{ text-align: center; color: #94a3b8; margin-bottom: 30px; }}
-        .file-card {{ background: #334155; padding: 15px 20px; margin-bottom: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #38bdf8; }}
-        .file-name {{ font-family: monospace; font-size: 14px; color: #cbd5e1; word-break: break-all; max-width: 500px; }}
-        .actions {{ display: flex; gap: 10px; }}
-        .action-btn, .view-btn {{ padding: 8px 14px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 13px; transition: 0.2s; }}
-        .view-btn {{ background: #0284c7; color: white; }}
-        .copy-btn {{ background: #10b981; color: white; }}
-        .download-btn {{ background: #8b5cf6; color: white; display: inline-flex; align-items: center; }}
-        .action-btn:hover, .view-btn:hover {{ opacity: 0.85; transform: translateY(-1px); }}
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
@@ -125,29 +112,26 @@ def generate_dashboard(output_dir, domain_name, all_files):
             {files_html}
         </div>
     </div>
-    <script>
-        async function copyCode(btn, filePath) {{
-            try {{
-                const response = await fetch(filePath);
-                const text = await response.text();
-                navigator.clipboard.writeText(text);
-                let originalText = btn.innerText;
-                btn.innerText = "✔ Copied!";
-                btn.style.background = "#059669";
-                setTimeout(() => {{
-                    btn.innerText = originalText;
-                    btn.style.background = "#10b981";
-                }}, 2000);
-            }} catch (err) {{
-                alert("Failed to copy file content.");
-            }}
-        }}
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
 """
     with open(dashboard_path, "w", encoding="utf-8") as f:
         f.write(html_content)
+    
+    # Copy style.css and script.js to output dir so dashboard looks good
+    try:
+        if os.path.exists("style.css"):
+            with open("style.css", "r") as sf:
+                with open(os.path.join(output_dir, "style.css"), "w") as df:
+                    df.write(sf.read())
+        if os.path.exists("script.js"):
+            with open("script.js", "r") as sf:
+                with open(os.path.join(output_dir, "script.js"), "w") as df:
+                    df.write(sf.read())
+    except:
+        pass
+
     print(f"\n{GREEN}[✨ DASHBOARD CREATED] Browser e open korun: {dashboard_path}{RESET}")
 
 def start_cloning(start_url):
@@ -244,5 +228,8 @@ def start_cloning(start_url):
 
 if __name__ == "__main__":
     banner()
-    target = input(f"{CYAN}Target website er link din -> {RESET}")
-    start_cloning(target)
+    target = input(f"{CYAN}Target website er link din (e.g. https://example.com) -> {RESET}").strip()
+    if target:
+        start_cloning(target)
+    else:
+        print(f"{RED}[!] Bhul link! Doya kore thik moto URL din.{RESET}")
